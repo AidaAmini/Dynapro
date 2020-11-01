@@ -1,0 +1,10 @@
+# PyTorch
+torch>=0.4.1
+# progress bars in model download and training scripts
+tqdm
+# Accessing files from S3 directly.
+boto3
+# Used for downloading models over HTTP
+requests
+
+#CUDA_VISIBLE_DEVICES=1 python3 global_local_with_decoder.py  --bert_model bert-base-uncased --do_predict   --do_lower_case   --train_file $SQUAD_DIR/train-gl-lc-v1.1.json   --predict_file $SQUAD_DIR/dev-gl-lc-v1.1.json   --train_batch_size 2 --predict_batch_size 2  --learning_rate 3e-5   --num_train_epochs 20.0   --max_seq_length 200   --doc_stride 128   --output_dir /tmp/debug_squad_lstm_jointsigmoidh1000_decoder/
