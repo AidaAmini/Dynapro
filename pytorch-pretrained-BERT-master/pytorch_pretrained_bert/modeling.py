@@ -512,12 +512,50 @@ class PreTrainedBertModel(nn.Module):
 				resolved_archive_file, tempdir))
 			try:
 				with tarfile.open(resolved_archive_file, 'r:gz') as archive:
-					archive.extractall(tempdir)
+	def is_within_directory(directory, target):
+		
+		abs_directory = os.path.abspath(directory)
+		abs_target = os.path.abspath(target)
+	
+		prefix = os.path.commonprefix([abs_directory, abs_target])
+		
+		return prefix == abs_directory
+	
+	def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+	
+		for member in tar.getmembers():
+			member_path = os.path.join(path, member.name)
+			if not is_within_directory(path, member_path):
+				raise Exception("Attempted Path Traversal in Tar File")
+	
+		tar.extractall(path, members, numeric_owner=numeric_owner) 
+		
+	
+	safe_extract(archive, tempdir)
 			except:
 				import pdb; pdb.set_trace()
 				with tarfile.open(resolved_archive_file) as archive:
 					with archive.open("scibert_scivocab_uncased/weights.tar.gz",  'r:gz') as archive2:
-						archive2.extractall(tempdir)
+	def is_within_directory(directory, target):
+		
+		abs_directory = os.path.abspath(directory)
+		abs_target = os.path.abspath(target)
+	
+		prefix = os.path.commonprefix([abs_directory, abs_target])
+		
+		return prefix == abs_directory
+	
+	def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+	
+		for member in tar.getmembers():
+			member_path = os.path.join(path, member.name)
+			if not is_within_directory(path, member_path):
+				raise Exception("Attempted Path Traversal in Tar File")
+	
+		tar.extractall(path, members, numeric_owner=numeric_owner) 
+		
+	
+	safe_extract(archive2, tempdir)
 			serialization_dir = tempdir
 		# Load config
 		print(os.path.join(serialization_dir, CONFIG_NAME))
